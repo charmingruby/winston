@@ -5,31 +5,30 @@ import (
 	"errors"
 	"math"
 
+	"github.com/charmingruby/stan/internal/platform/aikit/provider"
 	"github.com/firebase/genkit/go/genkit"
 
 	genai "github.com/firebase/genkit/go/ai"
-	googleai "google.golang.org/genai"
-)
-
-type EmbeddingTask string
-
-const (
-	RetrievalDocumentEmbeddingTask = "RETRIEVAL_DOCUMENT"
-	RetrievalQueryEmbeddingTask    = "RETRIEVAL_QUERY"
 )
 
 type Embedder struct {
-	ak    *AIKit
-	model string
-	dim   int
+	provider provider.Provider
+	genkit   *genkit.Genkit
+	model    string
+	dim      int
 }
 
-func NewEmbedder(ak *AIKit, model string, dim int) *Embedder {
-	return &Embedder{
-		ak:    ak,
-		model: model,
-		dim:   dim,
+func NewEmbedder(ak *AIKit, provider provider.Provider, model string, dim int) (*Embedder, error) {
+	if _, err := provider.Embedder(model, dim, false); err != nil {
+		return nil, err
 	}
+
+	return &Embedder{
+		genkit:   ak.Genkit,
+		model:    model,
+		provider: provider,
+		dim:      dim,
+	}, nil
 }
 
 func (e *Embedder) Embed(
@@ -37,22 +36,16 @@ func (e *Embedder) Embed(
 	text string,
 	query bool,
 ) ([]float32, error) {
-	task := RetrievalDocumentEmbeddingTask
-	if query {
-		task = RetrievalQueryEmbeddingTask
+	ref, err := e.provider.Embedder(e.model, e.dim, query)
+	if err != nil {
+		return nil, err
 	}
 
 	response, err := genkit.Embed(
 		ctx,
-		e.ak.Genkit,
-		genai.WithEmbedderName(e.model),
+		e.genkit,
+		genai.WithEmbedder(ref),
 		genai.WithDocs(genai.DocumentFromText(text, nil)),
-		genai.WithConfig(
-			&googleai.EmbedContentConfig{
-				TaskType:             task,
-				OutputDimensionality: new(int32(e.dim)),
-			},
-		),
 	)
 	if err != nil {
 		return nil, err

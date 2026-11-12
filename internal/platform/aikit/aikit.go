@@ -6,10 +6,11 @@ import (
 	"fmt"
 
 	genai "github.com/firebase/genkit/go/ai"
+	"github.com/firebase/genkit/go/core/api"
 	"github.com/firebase/genkit/go/core/status"
 	"github.com/firebase/genkit/go/genkit"
-	"github.com/firebase/genkit/go/plugins/googlegenai"
 
+	"github.com/charmingruby/stan/internal/platform/aikit/provider"
 	"github.com/charmingruby/stan/internal/platform/o11y/logging"
 )
 
@@ -17,32 +18,22 @@ var ErrInference = errors.New("inference failed")
 
 type AIKit struct {
 	Genkit *genkit.Genkit
-	model  string
 }
 
-func New(
-	ctx context.Context,
-	apiKey string,
-	model string,
-) *AIKit {
-	g := genkit.Init(
-		ctx,
-		genkit.WithExperimental(),
-		genkit.WithPlugins(
-			&googlegenai.GoogleAI{
-				APIKey: apiKey,
-			},
-		),
-	)
+func New(ctx context.Context, providers ...provider.Provider) *AIKit {
+	plugins := make([]api.Plugin, 0, len(providers))
+	for _, provider := range providers {
+		plugins = append(plugins, provider.Plugin())
+	}
 
 	return &AIKit{
-		Genkit: g,
-		model:  model,
+		Genkit: genkit.Init(ctx, genkit.WithExperimental(), genkit.WithPlugins(plugins...)),
 	}
 }
 
 func (a *AIKit) Infer(
 	ctx context.Context,
+	model genai.ModelRef,
 	tools []Tool,
 	opts ...genai.GenerateOption,
 ) (*genai.ModelResponse, error) {
@@ -54,15 +45,15 @@ func (a *AIKit) Infer(
 	}
 
 	opts = append([]genai.GenerateOption{
-		genai.WithModelName(a.model),
 		genai.WithTools(toolRefs...),
 		genai.WithMaxTurns(8),
+		genai.WithModel(model),
 	}, opts...)
 
 	response, err := genkit.Generate(ctx, a.Genkit, opts...)
 	if err != nil {
 		log.ErrorContext(ctx, "inference failed",
-			"model", a.model,
+			"model", model.Name(),
 			"status", status.Of(err),
 		)
 

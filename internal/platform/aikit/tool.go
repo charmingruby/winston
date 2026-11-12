@@ -30,12 +30,3 @@ func DefineTool[In, Out any](
 		),
 	}
 }
-
-func DefineResumableTool[In, Out, Resume any](
-	name, description string,
-	fn func(context.Context, In, *Resume) (Out, error),
-) Tool {
-	return Tool{
-		Ref: genai.NewResumableTool(name, description, fn),
-	}
-}

@@ -20,10 +20,11 @@ type Agent struct {
 func DefineAgent(
 	ak *AIKit,
 	name string,
+	model genai.ModelRef,
 	tools []Tool,
 	prompt aix.InlinePrompt,
 	opts ...aix.AgentOption[struct{}],
-) *Agent {
+) (*Agent, error) {
 	refs := make([]genai.ToolRef, 0, len(tools))
 	for _, tool := range tools {
 		genkit.RegisterAction(ak.Genkit, tool.Ref)
@@ -31,23 +32,23 @@ func DefineAgent(
 	}
 
 	cfg := aix.InlinePrompt{
-		genai.WithModelName(ak.model),
 		genai.WithTools(refs...),
 		genai.WithMaxTurns(8),
+		genai.WithModel(model),
+		genai.WithUse(
+			toolPolicy(),
+			agentObserver(name),
+		),
 	}
 
 	cfg = append(cfg, prompt...)
-	cfg = append(cfg, genai.WithUse(
-		toolPolicy(),
-		agentObserver(name),
-	))
 
 	def := genkitx.DefineAgent[struct{}](ak.Genkit, name, cfg, opts...)
 
 	return &Agent{
 		Genkit: def,
 		name:   name,
-	}
+	}, nil
 }
 
 func (a *Agent) Run(
@@ -62,7 +63,10 @@ func (a *Agent) Run(
 
 	out, err := a.Genkit.RunText(ctx, message, opts...)
 	if err != nil {
-		log.WarnContext(ctx, "agent invocation failed", "agent", a.name)
+		log.WarnContext(ctx, "agent invocation failed",
+			"agent", a.name,
+		)
+
 		return "", fmt.Errorf("%w: %w", ErrInference, err)
 	}
 
