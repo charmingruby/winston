@@ -6,8 +6,7 @@ import (
 )
 
 type Config struct {
-	Port        string `env:"PORT"         envDefault:"4000"`
-	DatabaseURL string `env:"DATABASE_URL" envDefault:"postgres://postgres:postgres@localhost:5432/lab?sslmode=disable"`
+	GeminiAPIKey string `env:"GEMINI_API_KEY"`
 }
 
 func Load() (*Config, error) {
