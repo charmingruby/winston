@@ -1,5 +1,8 @@
 # AIKit
 
+Runnable autonomous and multi-agent workflow examples are documented in
+[`examples/README.md`](examples/README.md).
+
 Register configured providers once in a shared Genkit instance, then pass a model
 reference when creating an agent or making a direct inference call. Embedders
 keep a provider adapter for document/query-specific options.

@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"os"
 	"strings"
 
@@ -17,25 +19,24 @@ func main() {
 	ctx := context.Background()
 
 	log := logging.InitLogger()
+	logging.WithLogger(ctx, log)
 
-	message := strings.TrimSpace(strings.Join(os.Args[1:], " "))
-	if message == "" {
-		log.Error(
-			"message cannot be blank",
-			"usage", "go run examples/basicagent/main.go <question>",
-		)
+	if err := run(ctx); err != nil {
+		log.ErrorContext(ctx, "winstom example failed", "error", err)
+	}
+}
 
-		return
+func run(ctx context.Context) error {
+	log := logging.LoggerFromContext(ctx)
+
+	goal := strings.TrimSpace(strings.Join(os.Args[1:], " "))
+	if goal == "" {
+		return errors.New("goal cannot be blank; usage: go run ./examples/winstom <question>")
 	}
 
 	cfg, err := config.Load()
 	if err != nil {
-		log.Error(
-			"error loading config",
-			"error", err,
-		)
-
-		return
+		return fmt.Errorf("load config: %w", err)
 	}
 
 	google := provider.NewGoogle(cfg.GeminiAPIKey)
@@ -58,26 +59,18 @@ func main() {
 		},
 	)
 	if err != nil {
-		log.Error(
-			"error defining agent",
-			"error", err,
-		)
-
-		return
+		return fmt.Errorf("define agent: %w", err)
 	}
 
-	response, err := agent.Run(ctx, message)
+	response, err := agent.Run(ctx, goal)
 	if err != nil {
-		log.Error(
-			"error running agent",
-			"error", err,
-		)
-
-		return
+		return fmt.Errorf("run agent: %w", err)
 	}
 
-	log.Info(
+	log.InfoContext(ctx,
 		"agent ran successfully",
 		"response", response,
 	)
+
+	return nil
 }
