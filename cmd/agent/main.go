@@ -9,17 +9,17 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/charmingruby/winstom/config"
 	"github.com/charmingruby/winstom/internal/agent/analyst"
 	"github.com/charmingruby/winstom/internal/agent/reviewer"
 	"github.com/charmingruby/winstom/internal/agent/strategist"
 	"github.com/charmingruby/winstom/internal/agent/winstom"
 	"github.com/charmingruby/winstom/internal/platform/aikit"
 	"github.com/charmingruby/winstom/internal/platform/aikit/provider"
-	"github.com/charmingruby/winstom/internal/platform/config"
 	"github.com/charmingruby/winstom/internal/platform/httpx"
 	"github.com/charmingruby/winstom/internal/platform/o11y/logging"
 	"github.com/charmingruby/winstom/internal/tool"
-	aix "github.com/firebase/genkit/go/ai/exp"
+	"github.com/firebase/genkit/go/ai/exp"
 	"github.com/firebase/genkit/go/ai/exp/localstore"
 )
 
@@ -67,7 +67,7 @@ func run(ctx context.Context) error {
 		ak,
 		google,
 		modelName,
-		[]aix.AgentRef{
+		[]exp.AgentRef{
 			an.Ref(),
 			st.Ref(),
 			rv.Ref(),
@@ -75,7 +75,7 @@ func run(ctx context.Context) error {
 		[]aikit.Tool{
 			tool.GetTeamRoaster(),
 		},
-		aix.WithSessionStore(localstore.NewInMemorySessionStore[struct{}]()),
+		exp.WithSessionStore(localstore.NewInMemorySessionStore[struct{}]()),
 	)
 	if err != nil {
 		return fmt.Errorf("define winstom: %w", err)
