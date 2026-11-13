@@ -3,6 +3,7 @@ package aikit
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/charmingruby/stan/internal/platform/o11y/logging"
@@ -13,8 +14,8 @@ import (
 )
 
 type Agent struct {
-	Genkit *aix.Agent[struct{}]
-	name   string
+	def  *aix.Agent[struct{}]
+	name string
 }
 
 func DefineAgent(
@@ -46,8 +47,8 @@ func DefineAgent(
 	def := genkitx.DefineAgent[struct{}](ak.Genkit, name, cfg, opts...)
 
 	return &Agent{
-		Genkit: def,
-		name:   name,
+		def:  def,
+		name: name,
 	}, nil
 }
 
@@ -61,7 +62,7 @@ func (a *Agent) Run(
 	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
 
-	out, err := a.Genkit.RunText(ctx, message, opts...)
+	out, err := a.def.RunText(ctx, message, opts...)
 	if err != nil {
 		log.WarnContext(ctx, "agent invocation failed",
 			"agent", a.name,
@@ -96,6 +97,14 @@ func (a *Agent) Run(
 	}
 
 	return text, nil
+}
+
+func (a *Agent) HandleHTTP(w http.ResponseWriter, r *http.Request) {
+	genkit.Handler(a.def).ServeHTTP(w, r)
+}
+
+func (a *Agent) Ref() aix.AgentRef {
+	return a.def.Ref()
 }
 
 func toolPolicy() genai.Middleware {

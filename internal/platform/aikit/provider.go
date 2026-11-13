@@ -1,4 +1,4 @@
-package provider
+package aikit
 
 import (
 	genai "github.com/firebase/genkit/go/ai"

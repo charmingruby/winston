@@ -2,37 +2,38 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
+	"net/http"
 	"os"
-	"strings"
+	"os/signal"
+	"syscall"
+	"time"
 
+	"github.com/charmingruby/stan/internal/agent/winstom"
 	"github.com/charmingruby/stan/internal/platform/aikit"
 	"github.com/charmingruby/stan/internal/platform/aikit/provider"
 	"github.com/charmingruby/stan/internal/platform/config"
+	"github.com/charmingruby/stan/internal/platform/httpx"
 	"github.com/charmingruby/stan/internal/platform/o11y/logging"
-	"github.com/firebase/genkit/go/ai"
 	aix "github.com/firebase/genkit/go/ai/exp"
+	"github.com/firebase/genkit/go/ai/exp/localstore"
 )
 
 func main() {
-	ctx := context.Background()
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
 
 	log := logging.InitLogger()
-	logging.WithLogger(ctx, log)
+	ctx = logging.WithLogger(ctx, log)
 
 	if err := run(ctx); err != nil {
 		log.ErrorContext(ctx, "winstom example failed", "error", err)
+		os.Exit(1)
 	}
 }
 
 func run(ctx context.Context) error {
 	log := logging.LoggerFromContext(ctx)
-
-	goal := strings.TrimSpace(strings.Join(os.Args[1:], " "))
-	if goal == "" {
-		return errors.New("goal cannot be blank; usage: go run ./examples/winstom <question>")
-	}
 
 	cfg, err := config.Load()
 	if err != nil {
@@ -42,35 +43,42 @@ func run(ctx context.Context) error {
 	google := provider.NewGoogle(cfg.GeminiAPIKey)
 	ak := aikit.New(ctx, google)
 
-	model := google.Model("gemini-3.5-flash-lite")
-
-	agent, err := aikit.DefineAgent(
+	w, err := winstom.Define(
 		ak,
-		"winstom",
-		model,
-		nil,
-		aix.InlinePrompt{
-			ai.WithSystem(
-				`You are Winstom, a friendly Overwatch assistant.
-				Help with heroes, abilities, team compositions, and strategies.
-				Keep answers short and clear.
-				If you are unsure, say so.`,
-			),
-		},
+		google,
+		"gemini-3.5-flash-lite",
+		aix.WithSessionStore(localstore.NewInMemorySessionStore[struct{}]()),
 	)
 	if err != nil {
 		return fmt.Errorf("define agent: %w", err)
 	}
 
-	response, err := agent.Run(ctx, goal)
-	if err != nil {
-		return fmt.Errorf("run agent: %w", err)
-	}
+	srv, r := httpx.NewServer(cfg.Port)
+	srv.WriteTimeout = 2 * time.Minute
 
-	log.InfoContext(ctx,
-		"agent ran successfully",
-		"response", response,
+	r.Post("/agents/winstom", func(rw http.ResponseWriter, r *http.Request) {
+		ctx, cancel := context.WithTimeout(r.Context(), 90*time.Second)
+		defer cancel()
+
+		w.HandleHTTP(rw, r.WithContext(ctx))
+	})
+
+	serverErr := make(chan error, 1)
+	go func() {
+		serverErr <- srv.Start()
+	}()
+
+	log.InfoContext(ctx, "winstom server listening",
+		"addr", srv.Addr,
 	)
 
-	return nil
+	select {
+	case err := <-serverErr:
+		return err
+	case <-ctx.Done():
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		return srv.Close(ctx)
+	}
 }

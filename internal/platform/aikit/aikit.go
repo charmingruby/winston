@@ -10,7 +10,6 @@ import (
 	"github.com/firebase/genkit/go/core/status"
 	"github.com/firebase/genkit/go/genkit"
 
-	"github.com/charmingruby/stan/internal/platform/aikit/provider"
 	"github.com/charmingruby/stan/internal/platform/o11y/logging"
 )
 
@@ -20,7 +19,7 @@ type AIKit struct {
 	Genkit *genkit.Genkit
 }
 
-func New(ctx context.Context, providers ...provider.Provider) *AIKit {
+func New(ctx context.Context, providers ...Provider) *AIKit {
 	plugins := make([]api.Plugin, 0, len(providers))
 	for _, provider := range providers {
 		plugins = append(plugins, provider.Plugin())

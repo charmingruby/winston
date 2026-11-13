@@ -5,20 +5,19 @@ import (
 	"errors"
 	"math"
 
-	"github.com/charmingruby/stan/internal/platform/aikit/provider"
 	"github.com/firebase/genkit/go/genkit"
 
 	genai "github.com/firebase/genkit/go/ai"
 )
 
 type Embedder struct {
-	provider provider.Provider
+	provider Provider
 	genkit   *genkit.Genkit
 	model    string
 	dim      int
 }
 
-func NewEmbedder(ak *AIKit, provider provider.Provider, model string, dim int) (*Embedder, error) {
+func NewEmbedder(ak *AIKit, provider Provider, model string, dim int) (*Embedder, error) {
 	if _, err := provider.Embedder(model, dim, false); err != nil {
 		return nil, err
 	}
