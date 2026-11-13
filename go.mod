@@ -1,4 +1,4 @@
-module github.com/charmingruby/stan
+module github.com/charmingruby/winstom
 
 go 1.27.0
 

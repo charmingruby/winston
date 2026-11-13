@@ -1,7 +1,7 @@
 package supervisor
 
 import (
-	"github.com/charmingruby/stan/internal/platform/aikit"
+	"github.com/charmingruby/winstom/internal/platform/aikit"
 	"github.com/firebase/genkit/go/ai"
 	"github.com/firebase/genkit/go/ai/exp"
 	middlewarex "github.com/firebase/genkit/go/plugins/middleware/exp"

@@ -8,7 +8,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/charmingruby/stan/internal/platform/validator"
+	"github.com/charmingruby/winstom/internal/platform/validator"
 )
 
 var (

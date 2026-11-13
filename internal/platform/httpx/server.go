@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/charmingruby/stan/internal/platform/o11y/logging"
+	"github.com/charmingruby/winstom/internal/platform/o11y/logging"
 )
 
 type Server struct {

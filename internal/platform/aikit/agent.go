@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/charmingruby/stan/internal/platform/o11y/logging"
+	"github.com/charmingruby/winstom/internal/platform/o11y/logging"
 	genai "github.com/firebase/genkit/go/ai"
 	aix "github.com/firebase/genkit/go/ai/exp"
 	"github.com/firebase/genkit/go/genkit"

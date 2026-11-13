@@ -9,12 +9,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/charmingruby/stan/internal/agent/winstom"
-	"github.com/charmingruby/stan/internal/platform/aikit"
-	"github.com/charmingruby/stan/internal/platform/aikit/provider"
-	"github.com/charmingruby/stan/internal/platform/config"
-	"github.com/charmingruby/stan/internal/platform/httpx"
-	"github.com/charmingruby/stan/internal/platform/o11y/logging"
+	"github.com/charmingruby/winstom/internal/agent/winstom"
+	"github.com/charmingruby/winstom/internal/platform/aikit"
+	"github.com/charmingruby/winstom/internal/platform/aikit/provider"
+	"github.com/charmingruby/winstom/internal/platform/config"
+	"github.com/charmingruby/winstom/internal/platform/httpx"
+	"github.com/charmingruby/winstom/internal/platform/o11y/logging"
 	aix "github.com/firebase/genkit/go/ai/exp"
 	"github.com/firebase/genkit/go/ai/exp/localstore"
 )

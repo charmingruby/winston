@@ -3,7 +3,7 @@ package aikit
 import (
 	"context"
 
-	"github.com/charmingruby/stan/internal/platform/validator"
+	"github.com/charmingruby/winstom/internal/platform/validator"
 	genai "github.com/firebase/genkit/go/ai"
 )
 

@@ -10,7 +10,7 @@ import (
 	"github.com/firebase/genkit/go/core/status"
 	"github.com/firebase/genkit/go/genkit"
 
-	"github.com/charmingruby/stan/internal/platform/o11y/logging"
+	"github.com/charmingruby/winstom/internal/platform/o11y/logging"
 )
 
 var ErrInference = errors.New("inference failed")

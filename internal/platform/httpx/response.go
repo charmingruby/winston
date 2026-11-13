@@ -5,8 +5,8 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/charmingruby/stan/internal/platform/o11y/logging"
-	"github.com/charmingruby/stan/internal/platform/validator"
+	"github.com/charmingruby/winstom/internal/platform/o11y/logging"
+	"github.com/charmingruby/winstom/internal/platform/validator"
 )
 
 type ErrorResponse struct {
