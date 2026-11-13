@@ -12,7 +12,7 @@ import (
 	"github.com/charmingruby/winstom/internal/agent/analyst"
 	"github.com/charmingruby/winstom/internal/agent/reviewer"
 	"github.com/charmingruby/winstom/internal/agent/strategist"
-	"github.com/charmingruby/winstom/internal/agent/supervisor"
+	"github.com/charmingruby/winstom/internal/agent/winstom"
 	"github.com/charmingruby/winstom/internal/platform/aikit"
 	"github.com/charmingruby/winstom/internal/platform/aikit/provider"
 	"github.com/charmingruby/winstom/internal/platform/config"
@@ -30,7 +30,7 @@ func main() {
 	ctx = logging.WithLogger(ctx, log)
 
 	if err := run(ctx); err != nil {
-		log.ErrorContext(ctx, "coach example failed", "error", err)
+		log.ErrorContext(ctx, "winstom example failed", "error", err)
 		os.Exit(1)
 	}
 }
@@ -62,7 +62,7 @@ func run(ctx context.Context) error {
 		return fmt.Errorf("define reviewer: %w", err)
 	}
 
-	sp, err := supervisor.Define(
+	w, err := winstom.Define(
 		ak,
 		google,
 		modelName,
@@ -74,17 +74,17 @@ func run(ctx context.Context) error {
 		aix.WithSessionStore(localstore.NewInMemorySessionStore[struct{}]()),
 	)
 	if err != nil {
-		return fmt.Errorf("define supervisor: %w", err)
+		return fmt.Errorf("define winstom: %w", err)
 	}
 
 	srv, r := httpx.NewServer(cfg.Port)
 	srv.WriteTimeout = 4 * time.Minute
 
-	r.Post("/agents/coach", func(rw http.ResponseWriter, r *http.Request) {
+	r.Post("/agents/winstom", func(rw http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(r.Context(), 3*time.Minute)
 		defer cancel()
 
-		sp.Agent.HandleHTTP(rw, r.WithContext(ctx))
+		w.HandleHTTP(rw, r.WithContext(ctx))
 	})
 
 	serverErr := make(chan error, 1)
@@ -92,7 +92,7 @@ func run(ctx context.Context) error {
 		serverErr <- srv.Start()
 	}()
 
-	log.InfoContext(ctx, "coach server listening",
+	log.InfoContext(ctx, "winstom server listening",
 		"addr", srv.Addr,
 	)
 

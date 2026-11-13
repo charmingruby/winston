@@ -4,9 +4,10 @@ import (
 	"github.com/charmingruby/winstom/internal/platform/aikit"
 	"github.com/firebase/genkit/go/ai"
 	"github.com/firebase/genkit/go/ai/exp"
+	middlewarex "github.com/firebase/genkit/go/plugins/middleware/exp"
 )
 
-const agentName = "Winstom"
+const agentName = "winstom"
 
 type Winstom struct {
 	*aikit.Agent
@@ -16,6 +17,7 @@ func Define(
 	ak *aikit.AIKit,
 	provider aikit.Provider,
 	modelName string,
+	agents []exp.AgentRef,
 	opts ...exp.AgentOption[struct{}],
 ) (*Winstom, error) {
 	agent, err := aikit.DefineAgent(
@@ -25,6 +27,12 @@ func Define(
 		nil,
 		exp.InlinePrompt{
 			ai.WithSystem(systemPrompt),
+			ai.WithMaxTurns(8),
+			ai.WithUse(&middlewarex.Agents{
+				Agents:         agents,
+				MaxDelegations: 5,
+				HistoryLength:  0,
+			}),
 		},
 		opts...,
 	)
