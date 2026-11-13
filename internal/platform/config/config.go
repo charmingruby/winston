@@ -7,6 +7,7 @@ import (
 
 type Config struct {
 	GeminiAPIKey string `env:"GEMINI_API_KEY"`
+	Port         string `env:"PORT"`
 }
 
 func Load() (*Config, error) {
