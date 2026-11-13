@@ -18,6 +18,7 @@ import (
 	"github.com/charmingruby/winstom/internal/platform/config"
 	"github.com/charmingruby/winstom/internal/platform/httpx"
 	"github.com/charmingruby/winstom/internal/platform/o11y/logging"
+	"github.com/charmingruby/winstom/internal/tool"
 	aix "github.com/firebase/genkit/go/ai/exp"
 	"github.com/firebase/genkit/go/ai/exp/localstore"
 )
@@ -70,6 +71,9 @@ func run(ctx context.Context) error {
 			an.Ref(),
 			st.Ref(),
 			rv.Ref(),
+		},
+		[]aikit.Tool{
+			tool.GetTeamRoaster(),
 		},
 		aix.WithSessionStore(localstore.NewInMemorySessionStore[struct{}]()),
 	)

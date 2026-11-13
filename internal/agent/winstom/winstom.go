@@ -18,13 +18,14 @@ func Define(
 	provider aikit.Provider,
 	modelName string,
 	agents []exp.AgentRef,
+	tools []aikit.Tool,
 	opts ...exp.AgentOption[struct{}],
 ) (*Winstom, error) {
 	agent, err := aikit.DefineAgent(
 		ak,
 		agentName,
 		provider.Model(modelName),
-		nil,
+		tools,
 		exp.InlinePrompt{
 			ai.WithSystem(systemPrompt),
 			ai.WithMaxTurns(8),
