@@ -31,7 +31,7 @@ func Define(
 			ai.WithMaxTurns(8),
 			ai.WithUse(&middlewarex.Agents{
 				Agents:         agents,
-				MaxDelegations: 5,
+				MaxDelegations: 3,
 				HistoryLength:  0,
 			}),
 		},

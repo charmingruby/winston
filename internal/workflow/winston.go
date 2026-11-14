@@ -8,7 +8,6 @@ import (
 	"github.com/charmingruby/erebor/aikit/provider"
 	"github.com/charmingruby/winston/config"
 	"github.com/charmingruby/winston/internal/agent/analyst"
-	"github.com/charmingruby/winston/internal/agent/reviewer"
 	"github.com/charmingruby/winston/internal/agent/strategist"
 	"github.com/charmingruby/winston/internal/agent/winston"
 	"github.com/charmingruby/winston/internal/tool"
@@ -31,16 +30,11 @@ func NewWinston(ctx context.Context, cfg *config.Config) (*winston.Winston, erro
 		return nil, fmt.Errorf("define strategist: %w", err)
 	}
 
-	rv, err := reviewer.Define(ak, google, modelName)
-	if err != nil {
-		return nil, fmt.Errorf("define reviewer: %w", err)
-	}
-
 	w, err := winston.Define(
 		ak,
 		google,
 		modelName,
-		[]exp.AgentRef{an.Ref(), st.Ref(), rv.Ref()},
+		[]exp.AgentRef{an.Ref(), st.Ref()},
 		[]aikit.Tool{tool.GetSquadRoster()},
 		exp.WithSessionStore(localstore.NewInMemorySessionStore[struct{}]()),
 	)
