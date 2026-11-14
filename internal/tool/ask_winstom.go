@@ -19,7 +19,7 @@ func AskWinston(run func(context.Context, string) (string, error)) aikit.Tool {
 	return aikit.DefineTool(
 		"ask_winston",
 		"Asks winston for Overwatch team composition, strategy, or gameplay analysis. "+
-			"winston can consult the team roster and delegate to analyst, strategist, and reviewer agents. "+
+			"winston can consult the squad roster and delegate to analyst, strategist, and reviewer agents. "+
 			"Each call is independent; include relevant context from previous messages.",
 		func(ctx context.Context, input AskWinstonInput) (AskWinstonOutput, error) {
 			if input.Message == "" {
