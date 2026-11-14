@@ -1,0 +1,7 @@
+version: '3'
+
+tasks:
+  build:mcp:
+    desc: Build the Winston MCP stdio server
+    cmds:
+      - go build -o bin/winston-mcp ./cmd/mcp
