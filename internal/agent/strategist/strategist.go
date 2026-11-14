@@ -1,7 +1,7 @@
 package strategist
 
 import (
-	"github.com/charmingruby/winston/internal/platform/aikit"
+	"github.com/charmingruby/erebor/aikit"
 	"github.com/firebase/genkit/go/ai"
 	"github.com/firebase/genkit/go/ai/exp"
 )

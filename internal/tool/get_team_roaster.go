@@ -3,14 +3,14 @@ package tool
 import (
 	"context"
 
-	"github.com/charmingruby/winston/internal/data"
-	"github.com/charmingruby/winston/internal/platform/aikit"
+	"github.com/charmingruby/erebor/aikit"
+	"github.com/charmingruby/winston/internal/model"
 )
 
 type GetTeamRoasterInput struct{}
 
 type GetTeamRoasterOutput struct {
-	Players []data.Player `json:"players" jsonschema:"description=Known team players. An empty list means no team information has been configured."`
+	Players []model.Player `json:"players" jsonschema:"description=Known team players. An empty list means no team information has been configured."`
 }
 
 func GetTeamRoaster() aikit.Tool {
@@ -23,16 +23,16 @@ func GetTeamRoaster() aikit.Tool {
 			"If the roster is empty or information is missing, ask the user instead of inventing it.",
 		func(ctx context.Context, input GetTeamRoasterInput) (GetTeamRoasterOutput, error) {
 			return GetTeamRoasterOutput{
-				Players: []data.Player{
+				Players: []model.Player{
 					{
 						Name: "G",
-						Roles: []data.PlayerRole{
+						Roles: []model.PlayerRole{
 							{
-								Role: data.SupRole,
-								HeroPool: []data.Hero{
-									data.AnaHero,
-									data.LifeweaverHero,
-									data.MoiraHero,
+								Role: model.SupRole,
+								HeroPool: []model.Hero{
+									model.AnaHero,
+									model.LifeweaverHero,
+									model.MoiraHero,
 								},
 							},
 						},

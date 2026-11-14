@@ -9,9 +9,10 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/charmingruby/erebor/env"
+	"github.com/charmingruby/erebor/httpx"
+	"github.com/charmingruby/erebor/o11y/logging"
 	"github.com/charmingruby/winston/config"
-	"github.com/charmingruby/winston/internal/platform/httpx"
-	"github.com/charmingruby/winston/internal/platform/o11y/logging"
 	"github.com/charmingruby/winston/internal/workflow"
 )
 
@@ -31,7 +32,7 @@ func main() {
 func run(ctx context.Context) error {
 	log := logging.LoggerFromContext(ctx)
 
-	cfg, err := config.Load()
+	cfg, err := env.Load[config.Config]()
 	if err != nil {
 		return fmt.Errorf("load config: %w", err)
 	}

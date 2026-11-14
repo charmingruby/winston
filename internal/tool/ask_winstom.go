@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/charmingruby/winston/internal/platform/aikit"
+	"github.com/charmingruby/erebor/aikit"
 )
 
 type AskWinstonInput struct {

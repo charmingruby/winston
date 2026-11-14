@@ -7,9 +7,10 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/charmingruby/erebor/aikit"
+	"github.com/charmingruby/erebor/env"
+	"github.com/charmingruby/erebor/o11y/logging"
 	"github.com/charmingruby/winston/config"
-	"github.com/charmingruby/winston/internal/platform/aikit"
-	"github.com/charmingruby/winston/internal/platform/o11y/logging"
 	"github.com/charmingruby/winston/internal/tool"
 	"github.com/charmingruby/winston/internal/workflow"
 )
@@ -28,7 +29,7 @@ func main() {
 }
 
 func run(ctx context.Context) error {
-	cfg, err := config.Load()
+	cfg, err := env.Load[config.Config]()
 	if err != nil {
 		return fmt.Errorf("load config: %w", err)
 	}
@@ -38,12 +39,12 @@ func run(ctx context.Context) error {
 		return err
 	}
 
-	srv := aikit.NewMCPServer(ctx, []aikit.Tool{
+	srv := aikit.NewMCPServer(ctx, "winston", []aikit.Tool{
 		tool.GetTeamRoaster(),
 		tool.AskWinston(func(ctx context.Context, message string) (string, error) {
 			return w.Run(ctx, message)
 		}),
 	})
 
-	return srv.Start(ctx)
+	return srv.RunStdio(ctx)
 }
