@@ -41,7 +41,7 @@ func NewWinston(ctx context.Context, cfg *config.Config) (*winston.Winston, erro
 		google,
 		modelName,
 		[]exp.AgentRef{an.Ref(), st.Ref(), rv.Ref()},
-		[]aikit.Tool{tool.GetSquadRoaster()},
+		[]aikit.Tool{tool.GetSquadRoster()},
 		exp.WithSessionStore(localstore.NewInMemorySessionStore[struct{}]()),
 	)
 	if err != nil {

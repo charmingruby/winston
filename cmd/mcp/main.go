@@ -40,7 +40,7 @@ func run(ctx context.Context) error {
 	}
 
 	srv := aikit.NewMCPServer(ctx, "winston", []aikit.Tool{
-		tool.GetSquadRoaster(),
+		tool.GetSquadRoster(),
 		tool.AskWinston(func(ctx context.Context, message string) (string, error) {
 			return w.Run(ctx, message)
 		}),
