@@ -3,8 +3,8 @@ package tool
 import (
 	"context"
 
-	"github.com/charmingruby/winstom/internal/data"
-	"github.com/charmingruby/winstom/internal/platform/aikit"
+	"github.com/charmingruby/winston/internal/data"
+	"github.com/charmingruby/winston/internal/platform/aikit"
 )
 
 type GetTeamRoasterInput struct{}

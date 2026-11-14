@@ -10,7 +10,7 @@ import (
 	mcpserver "github.com/mark3labs/mcp-go/server"
 )
 
-const mcpServerName string = "Stan"
+const mcpServerName string = "winston"
 
 type MCPServer struct {
 	*genkitmcp.GenkitMCPServer

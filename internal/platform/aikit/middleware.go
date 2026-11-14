@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/charmingruby/winstom/internal/platform/o11y/logging"
+	"github.com/charmingruby/winston/internal/platform/o11y/logging"
 	genai "github.com/firebase/genkit/go/ai"
 )
 

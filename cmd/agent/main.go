@@ -9,18 +9,10 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/charmingruby/winstom/config"
-	"github.com/charmingruby/winstom/internal/agent/analyst"
-	"github.com/charmingruby/winstom/internal/agent/reviewer"
-	"github.com/charmingruby/winstom/internal/agent/strategist"
-	"github.com/charmingruby/winstom/internal/agent/winstom"
-	"github.com/charmingruby/winstom/internal/platform/aikit"
-	"github.com/charmingruby/winstom/internal/platform/aikit/provider"
-	"github.com/charmingruby/winstom/internal/platform/httpx"
-	"github.com/charmingruby/winstom/internal/platform/o11y/logging"
-	"github.com/charmingruby/winstom/internal/tool"
-	"github.com/firebase/genkit/go/ai/exp"
-	"github.com/firebase/genkit/go/ai/exp/localstore"
+	"github.com/charmingruby/winston/config"
+	"github.com/charmingruby/winston/internal/platform/httpx"
+	"github.com/charmingruby/winston/internal/platform/o11y/logging"
+	"github.com/charmingruby/winston/internal/workflow"
 )
 
 func main() {
@@ -31,7 +23,7 @@ func main() {
 	ctx = logging.WithLogger(ctx, log)
 
 	if err := run(ctx); err != nil {
-		log.ErrorContext(ctx, "winstom example failed", "error", err)
+		log.ErrorContext(ctx, "winston example failed", "error", err)
 		os.Exit(1)
 	}
 }
@@ -44,47 +36,15 @@ func run(ctx context.Context) error {
 		return fmt.Errorf("load config: %w", err)
 	}
 
-	google := provider.NewGoogle(cfg.GeminiAPIKey)
-	ak := aikit.New(ctx, google)
-	modelName := "gemini-3.5-flash-lite"
-
-	an, err := analyst.Define(ak, google, modelName)
+	w, err := workflow.NewWinston(ctx, cfg)
 	if err != nil {
-		return fmt.Errorf("define analyst: %w", err)
-	}
-
-	st, err := strategist.Define(ak, google, modelName)
-	if err != nil {
-		return fmt.Errorf("define strategist: %w", err)
-	}
-
-	rv, err := reviewer.Define(ak, google, modelName)
-	if err != nil {
-		return fmt.Errorf("define reviewer: %w", err)
-	}
-
-	w, err := winstom.Define(
-		ak,
-		google,
-		modelName,
-		[]exp.AgentRef{
-			an.Ref(),
-			st.Ref(),
-			rv.Ref(),
-		},
-		[]aikit.Tool{
-			tool.GetTeamRoaster(),
-		},
-		exp.WithSessionStore(localstore.NewInMemorySessionStore[struct{}]()),
-	)
-	if err != nil {
-		return fmt.Errorf("define winstom: %w", err)
+		return err
 	}
 
 	srv, r := httpx.NewServer(cfg.Port)
 	srv.WriteTimeout = 4 * time.Minute
 
-	r.Post("/agents/winstom", func(rw http.ResponseWriter, r *http.Request) {
+	r.Post("/agents/winston", func(rw http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(r.Context(), 3*time.Minute)
 		defer cancel()
 
@@ -96,7 +56,7 @@ func run(ctx context.Context) error {
 		serverErr <- srv.Start()
 	}()
 
-	log.InfoContext(ctx, "winstom server listening",
+	log.InfoContext(ctx, "winston server listening",
 		"addr", srv.Addr,
 	)
 

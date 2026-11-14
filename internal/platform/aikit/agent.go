@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/charmingruby/winstom/internal/platform/o11y/logging"
+	"github.com/charmingruby/winston/internal/platform/o11y/logging"
 	genai "github.com/firebase/genkit/go/ai"
 	aix "github.com/firebase/genkit/go/ai/exp"
 	"github.com/firebase/genkit/go/genkit"
@@ -59,7 +59,7 @@ func (a *Agent) Run(
 ) (string, error) {
 	log := logging.LoggerFromContext(ctx)
 
-	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Minute)
 	defer cancel()
 
 	out, err := a.def.RunText(ctx, message, opts...)

@@ -1,4 +1,4 @@
-module github.com/charmingruby/winstom
+module github.com/charmingruby/winston
 
 go 1.27.0
 

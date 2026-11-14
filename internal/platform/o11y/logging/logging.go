@@ -13,9 +13,10 @@ type Logger = slog.Logger
 type loggerCtxKey struct{}
 
 func InitLogger() *Logger {
-	Log = slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+	Log = slog.New(slog.NewJSONHandler(os.Stderr, &slog.HandlerOptions{
 		Level: slog.LevelDebug,
 	}))
+	slog.SetDefault(Log)
 
 	return Log
 }

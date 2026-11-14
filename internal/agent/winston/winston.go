@@ -1,15 +1,15 @@
-package winstom
+package winston
 
 import (
-	"github.com/charmingruby/winstom/internal/platform/aikit"
+	"github.com/charmingruby/winston/internal/platform/aikit"
 	"github.com/firebase/genkit/go/ai"
 	"github.com/firebase/genkit/go/ai/exp"
 	middlewarex "github.com/firebase/genkit/go/plugins/middleware/exp"
 )
 
-const agentName = "winstom"
+const agentName = "winston"
 
-type Winstom struct {
+type Winston struct {
 	*aikit.Agent
 }
 
@@ -20,7 +20,7 @@ func Define(
 	agents []exp.AgentRef,
 	tools []aikit.Tool,
 	opts ...exp.AgentOption[struct{}],
-) (*Winstom, error) {
+) (*Winston, error) {
 	agent, err := aikit.DefineAgent(
 		ak,
 		agentName,
@@ -41,5 +41,5 @@ func Define(
 		return nil, err
 	}
 
-	return &Winstom{agent}, nil
+	return &Winston{agent}, nil
 }
