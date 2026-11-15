@@ -10,4 +10,4 @@ A coach for our squad, helping us pick heroes, build compositions, and plan stra
 
 - **MCP:** stdio server for MCP clients;
 - **Agent:** HTTP server;
-- **Discord mentions:** bot that responds when mentioned in a server;
+- **Discord:** bot that responds to mentions and replies to its messages in a server, using the replied-to response as context;
