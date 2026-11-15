@@ -3,6 +3,7 @@ module github.com/charmingruby/winston
 go 1.27.0
 
 require (
+	github.com/bwmarrin/discordgo v0.29.0
 	github.com/charmingruby/erebor v0.0.4
 	github.com/firebase/genkit/go v1.14.0
 )

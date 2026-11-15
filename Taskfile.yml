@@ -1,6 +1,14 @@
 version: '3'
 
 tasks:
+  run:discord:
+    desc: Run the mention-based Winston Discord bot
+    cmds:
+      - go run ./cmd/discord
+  run:agent:
+    desc: Run the Winston HTTP server
+    cmds:
+      - go run ./cmd/agent
   build:mcp:
     desc: Build the Winston MCP stdio server
     cmds:
