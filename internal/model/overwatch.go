@@ -30,4 +30,8 @@ const (
 	WinstonHero    Hero = "Winston"
 	JunoHero       Hero = "Juno"
 	ZenyattaHero   Hero = "Zenyatta"
+	Soldier76Hero  Hero = "Soldier: 76"
+	JunkratHero    Hero = "Junkrat"
+	SierraHero     Hero = "Sierra"
+	DoctrineHero   Hero = "Doctrine"
 )

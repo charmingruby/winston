@@ -4,7 +4,7 @@ import "github.com/charmingruby/winston/internal/model"
 
 var Roster = []model.Player{
 	{
-		Name: "G",
+		Name: "Gustavo",
 		Roles: []model.PlayerRole{
 			{
 				Role: model.TankRole,
@@ -30,7 +30,7 @@ var Roster = []model.Player{
 		},
 	},
 	{
-		Name: "S",
+		Name: "Samuel",
 		Roles: []model.PlayerRole{
 			{
 				Role: model.DPSRole,
@@ -46,6 +46,29 @@ var Roster = []model.Player{
 				HeroPool: []model.Hero{
 					model.MoiraHero,
 					model.KirikoHero,
+				},
+			},
+		},
+	},
+	{
+		Name: "Pedro",
+		Roles: []model.PlayerRole{
+			{
+				Role: model.DPSRole,
+				HeroPool: []model.Hero{
+					model.Soldier76Hero,
+					model.JunkratHero,
+					model.SierraHero,
+					model.ReaperHero,
+				},
+			},
+			{
+				Role: model.SupRole,
+				HeroPool: []model.Hero{
+					model.ZenyattaHero,
+					model.JunoHero,
+					model.MoiraHero,
+					model.DoctrineHero,
 				},
 			},
 		},
