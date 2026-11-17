@@ -6,13 +6,14 @@ import (
 	"fmt"
 
 	"github.com/charmingruby/erebor/discord"
+	"github.com/charmingruby/erebor/discord/mention"
 )
 
 var ErrGenerateAnswer = errors.New("generate Discord bot answer")
 
 func New(token string, agentFn func(context.Context, string) (string, error)) (*discord.Bot, error) {
 	return discord.NewBot(token,
-		discord.WithHandler(func(ctx context.Context, message discord.Message) (string, error) {
+		discord.WithMentionReplyHandler(func(ctx context.Context, message mention.Message) (string, error) {
 			return generateAnswer(ctx, message, agentFn)
 		}),
 		discord.WithErrorMessage("Não consegui consultar o Winston agora. Tente novamente em instantes."),
@@ -21,7 +22,7 @@ func New(token string, agentFn func(context.Context, string) (string, error)) (*
 
 func generateAnswer(
 	ctx context.Context,
-	message discord.Message,
+	message mention.Message,
 	agentFn func(context.Context, string) (string, error),
 ) (string, error) {
 	question := message.Content
