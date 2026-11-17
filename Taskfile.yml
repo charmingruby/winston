@@ -1,7 +1,7 @@
-version: '3'
+version: "3"
 
 tasks:
-  run:discord:
+  run:bot:
     desc: Run the mention-based Winston Discord bot
     cmds:
       - go run ./cmd/discord
