@@ -14,8 +14,8 @@ github.com/caarlos0/env v3.5.0+incompatible h1:Yy0UN8o9Wtr/jGHZDpCBLpNrzcFLLM2yi
 github.com/caarlos0/env v3.5.0+incompatible/go.mod h1:tdCsowwCzMLdkqRYDlHpZCp2UooDD3MspDBjZ2AD02Y=
 github.com/cespare/xxhash/v2 v2.3.0 h1:UL815xU9SqsFlibzuggzjXhog7bL6oX9BbNZnL2UFvs=
 github.com/cespare/xxhash/v2 v2.3.0/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
-github.com/charmingruby/erebor v0.0.4 h1:j7D+wW2KprYaJkMJaNeqJ1RU8wiPJpSAvFFsP95/heE=
-github.com/charmingruby/erebor v0.0.4/go.mod h1:Lz5v3zrn2fSBErkxPDBlhY/l08Z+5eF6H4NebV0bV2M=
+github.com/charmingruby/erebor v0.0.5 h1:lyLMPnBdCbgJMnkKHt1MpXsr4RaxVAMU09vlJNPcXnY=
+github.com/charmingruby/erebor v0.0.5/go.mod h1:bjh8UqoJKeNiAiDAflT00HLdvVUCxXfMIZ23pSR2smY=
 github.com/coder/websocket v1.8.14 h1:9L0p0iKiNOibykf283eHkKUHHrpG7f65OE3BhhO7v9g=
 github.com/coder/websocket v1.8.14/go.mod h1:NX3SzP+inril6yawo5CQXx8+fk145lPDC6pumgx0mVg=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

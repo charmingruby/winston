@@ -4,7 +4,7 @@ tasks:
   run:bot:
     desc: Run the mention-based Winston Discord bot
     cmds:
-      - go run ./cmd/discord
+      - go run ./cmd/bot
   run:agent:
     desc: Run the Winston HTTP server
     cmds:

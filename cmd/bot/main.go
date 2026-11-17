@@ -45,5 +45,5 @@ func run(ctx context.Context) error {
 		return err
 	}
 
-	return bot.ListenToMentions(ctx)
+	return bot.Listen(ctx)
 }

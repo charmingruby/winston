@@ -3,8 +3,7 @@ module github.com/charmingruby/winston
 go 1.27.0
 
 require (
-	github.com/bwmarrin/discordgo v0.29.0
-	github.com/charmingruby/erebor v0.0.4
+	github.com/charmingruby/erebor v0.0.5
 	github.com/firebase/genkit/go v1.14.0
 )
 
@@ -14,6 +13,7 @@ require (
 	cloud.google.com/go/compute/metadata v0.9.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.2 // indirect
+	github.com/bwmarrin/discordgo v0.29.0 // indirect
 	github.com/caarlos0/env v3.5.0+incompatible // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/coder/websocket v1.8.14 // indirect
